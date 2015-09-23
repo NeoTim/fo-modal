@@ -1,0 +1,35 @@
+{
+  "name": "angular-link-active",
+  "homepage": "https://github.com/forsigner/angular-link-active",
+  "authors": [
+    "forsigner"
+  ],
+  "description": "An AngularJS directive to handle link active state",
+  "main": "angular-link-active.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "angular",
+    "link",
+    "active"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "ba4dca7896",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "ba4dca78964684b27b2491887dace19c1903f786"
+  },
+  "_source": "git://github.com/forsigner/angular-link-active.git",
+  "_target": "*",
+  "_originalSource": "angular-link-active",
+  "_direct": true
+}

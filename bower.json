@@ -1,0 +1,30 @@
+{
+  "name": "angular-nearby-popover",
+  "version": "1.0.3",
+  "homepage": "https://github.com/forsigner/angular-nearby-popover",
+  "authors": [
+    "forsigner"
+  ],
+  "description": "angular popover",
+  "moduleType": [
+    "globals"
+  ],
+  "main": "src/angular-nearby-popover.js",
+  "keywords": [
+    "angular",
+    "nearby",
+    "popover",
+    "tether"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "tether": "*"
+  }
+}

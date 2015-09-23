@@ -1,0 +1,26 @@
+{
+  "name": "angular-link-active",
+  "version": "1.0.0",
+  "homepage": "https://github.com/forsigner/angular-link-active",
+  "authors": [
+    "forsigner"
+  ],
+  "description": "An AngularJS directive to handle link active state",
+  "main": "angular-link-active.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "angular",
+    "link",
+    "active"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
