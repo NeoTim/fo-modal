@@ -8,7 +8,7 @@ var minifyCSS = require('gulp-minify-css');
 gulp.task('default', ['less', 'js', 'watch']);
 
 gulp.task('less', function () {
-  return gulp.src('./src/less/fo-popover.less')
+  return gulp.src('./src/less/*.less')
     .pipe(less())
     .pipe(gulp.dest('./dist/css'));
 });

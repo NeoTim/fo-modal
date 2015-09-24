@@ -1,7 +1,7 @@
 {
-  "name": "angular-nearby-popover",
+  "name": "fo-modal",
   "version": "1.0.3",
-  "homepage": "https://github.com/forsigner/angular-nearby-popover",
+  "homepage": "https://github.com/forsigner/fo-modal",
   "authors": [
     "forsigner"
   ],
@@ -9,7 +9,7 @@
   "moduleType": [
     "globals"
   ],
-  "main": "src/angular-nearby-popover.js",
+  "main": "dist/js/fo-modal.js",
   "keywords": [
     "angular",
     "nearby",
@@ -21,7 +21,6 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "test",
     "tests"
   ],
   "dependencies": {
