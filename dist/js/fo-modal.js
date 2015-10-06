@@ -22,10 +22,11 @@
 
       open: function(option) {
 
-        if (this._isCreated()) {
+
+        if (!this._isCreated()) {
           var templateString = $templateCache.get(option.templateUrl);
           var $body = angular.element($document).find('body');
-          var $wrapper = angular.element('<div class="fo-modal"></div>');
+          var $wrapper = angular.element('<div class="fo-modal animated"></div>');
 
           $modal = angular.element($wrapper).append(templateString);
           this.element = $modal;
@@ -50,6 +51,7 @@
 
         $layer.addClass('fo-open');
         $modal.addClass('fo-open');
+        $modal.addClass('fadeIn');
         new Tether(tetherOption);
 
         return this;
