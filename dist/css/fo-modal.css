@@ -2,13 +2,29 @@
   position: absolute;
   display: none;
   border-radius: 4px;
-  padding: 15px;
+  padding: 10px 80px 30px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   background: #fff;
   z-index: 10001;
 }
 .fo-modal.fo-open {
   display: inline-block;
+}
+.fo-modal .modal-close:before {
+  font-family: 'Helvetica', Arial, sans-serif;
+  cursor: pointer;
+  background: transparent;
+  color: #bbb;
+  content: '\00D7';
+  font-size: 25px;
+  font-weight: 300;
+  height: 30px;
+  line-height: 25px;
+  position: absolute;
+  text-align: center;
+  right: 3px;
+  top: 3px;
+  width: 30px;
 }
 .fo-layer {
   width: 100%;
