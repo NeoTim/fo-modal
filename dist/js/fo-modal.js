@@ -3,7 +3,11 @@
 
   angular.module('foModal', [])
 
-  .factory('foModal', ['$rootScope', '$templateCache', '$document', '$compile', '$controller', function($rootScope, $templateCache, $document, $compile, $controller) {
+  .factory('foModal', foModal);
+
+  foModal.$inject = ['$rootScope', '$templateCache', '$document', '$compile', '$controller'];
+
+  function foModal($rootScope, $templateCache, $document, $compile, $controller) {
 
     var $modal;
     var $layer = angular.element('<div class="fo-layer"></div>');
@@ -64,9 +68,12 @@
 
     };
 
+
     return modal;
 
-  }]);
+  }
+
+
 
 
 })(window, window.angular);
