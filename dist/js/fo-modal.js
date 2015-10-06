@@ -12,27 +12,34 @@
     var modal = {
       element: '',
 
+      _isCreated: function() {
+        return document.querySelector('.fo-layer') ? true : false;
+      },
+
       isOpened: function() {
         return $modal.hasClass('open');
       },
 
       open: function(option) {
 
-        var templateString = $templateCache.get(option.templateUrl);
-        var $body = angular.element($document).find('body');
-        var $wrapper = angular.element('<div class="fo-modal"></div>');
+        if (this._isCreated()) {
+          var templateString = $templateCache.get(option.templateUrl);
+          var $body = angular.element($document).find('body');
+          var $wrapper = angular.element('<div class="fo-modal"></div>');
 
-        $modal = angular.element($wrapper).append(templateString);
-        this.element = $modal;
+          $modal = angular.element($wrapper).append(templateString);
+          this.element = $modal;
 
-        $body.append($layer);
-        $body.append($modal);
+          $body.append($layer);
+          $body.append($modal);
 
-        $compile($modal)($rootScope);
-        var controllerInstance = $controller(option.controller, {
-          $scope: $rootScope,
-          $element: $modal
-        }, null);
+          $compile($modal)($rootScope);
+          var controllerInstance = $controller(option.controller, {
+            $scope: $rootScope,
+            $element: $modal
+          }, null);
+
+        }
 
         var tetherOption = {
           element: $modal[0],
