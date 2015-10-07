@@ -22,20 +22,20 @@
         return $modal.hasClass('open');
       },
 
-      open: function(option) {
+      open: function(options) {
 
-        // if (option.controller && (angular.isString(option.controller) || angular.isArray(option.controller) || angular.isFunction(option.controller))) {}
+        // if (options.controller && (angular.isString(options.controller) || angular.isArray(options.controller) || angular.isFunction(options.controller))) {}
 
-        $modal = _createModalElement(option.templateUrl);
+        $modal = _createModalElement(options.templateUrl);
 
         _appendToBody($modal, $layer, modal.isCreated());
 
         $compile($modal)($rootScope);
 
-        var promises = _handleResolve(option.resolve);
+        var promises = _handleResolve(options.resolve);
 
         $q.all(promises).then(function(value) {
-          _instantiateController(option.controller, $modal, value);
+          _instantiateController(options.controller, $modal, value);
           _showModal($modal, $layer);
           return this;
         });
