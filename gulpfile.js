@@ -19,6 +19,6 @@ gulp.task('js', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(['./src/less/*.scss'], ['less']);
+  gulp.watch(['./src/less/*.less'], ['less']);
   gulp.watch(['./src/js/*.js'], ['js']);
 });

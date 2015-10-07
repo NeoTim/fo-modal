@@ -5,18 +5,16 @@
 
   .factory('foModal', foModal);
 
-  foModal.$inject = ['$rootScope', '$templateCache', '$document', '$compile', '$controller'];
+  foModal.$inject = ['$rootScope', '$templateCache', '$document', '$compile', '$controller', '$q', '$injector'];
 
-  function foModal($rootScope, $templateCache, $document, $compile, $controller) {
+  function foModal($rootScope, $templateCache, $document, $compile, $controller, $q, $injector) {
 
     var $modal;
-    var $layer = angular.element('<div class="fo-layer"></div>');
-
+    var $layer = _createLayerElement();
 
     var modal = {
-      element: '',
 
-      _isCreated: function() {
+      isCreated: function() {
         return document.querySelector('.fo-layer') ? true : false;
       },
 
@@ -26,42 +24,24 @@
 
       open: function(option) {
 
+        // if (option.controller && (angular.isString(option.controller) || angular.isArray(option.controller) || angular.isFunction(option.controller))) {}
 
-        if (!this._isCreated()) {
-          var templateString = $templateCache.get(option.templateUrl);
-          var $body = angular.element($document).find('body');
-          var $wrapper = angular.element('<div class="fo-modal animated"></div>');
+        $modal = _createModalElement(option.templateUrl);
 
-          $modal = angular.element($wrapper).append(templateString);
-          this.element = $modal;
+        _appendToBody($modal, $layer, modal.isCreated());
 
-          $body.append($layer);
-          $body.append($modal);
+        $compile($modal)($rootScope);
 
-          $compile($modal)($rootScope);
-          var controllerInstance = $controller(option.controller, {
-            $scope: $rootScope,
-            $element: $modal
-          }, null);
+        var promises = _handleResolve(option.resolve);
 
-        }
-
-        var tetherOption = {
-          element: $modal[0],
-          target: $layer[0],
-          attachment: 'middle middle',
-          targetAttachment: 'middle middle'
-        };
-
-        $layer.addClass('fo-open');
-        $modal.addClass('fo-open');
-        $modal.addClass('fadeIn');
-        new Tether(tetherOption);
-
-        return this;
+        $q.all(promises).then(function(value) {
+          _instantiateController(option.controller, $modal, value);
+          _showModal($modal, $layer);
+          return this;
+        });
       },
 
-      close: function(name) {
+      close: function() {
         $modal.removeClass('fo-open');
         $layer.removeClass('fo-open');
       }
@@ -69,11 +49,67 @@
     };
 
 
-    return modal;
+    return {
+      open: modal.open,
+      close: modal.close
+    };
+
+    /////////////////////////////////////////
+    function _createModalElement(templateUrl) {
+      var templateString = $templateCache.get(templateUrl);
+      var $wrapper = angular.element('<div class="fo-modal fo-animated"></div>');
+      return angular.element($wrapper).append(templateString);
+    }
+
+    function _createLayerElement() {
+      return angular.element('<div class="fo-layer"></div>');
+    }
+
+    function _appendToBody($modal, $layer, isModalCreated) {
+      var $body = angular.element($document).find('body');
+
+      if (isModalCreated) {
+        angular.element($layer).remove();
+        angular.element($modal).remove();
+      }
+
+      $body.append($layer);
+      $body.append($modal);
+    }
+
+    function _handleResolve(resolve) {
+      var promises = {};
+
+      angular.forEach(resolve, function(value, key) {
+        promises[key] = angular.isString(value) ? value : $injector.invoke(value);
+      });
+
+      return promises;
+    }
+
+    function _showModal($modal, $layer) {
+      var tetherOption = {
+        element: $modal[0],
+        target: $layer[0],
+        attachment: 'middle middle',
+        targetAttachment: 'middle middle'
+      };
+
+      $layer.addClass('fo-open');
+      $modal.addClass('fo-open').addClass('fo-fade-in');
+      new Tether(tetherOption);
+    }
+
+    function _instantiateController(constructor, element, resolveData) {
+      var locals = angular.extend({
+        $scope: $rootScope,
+        $element: $modal
+      }, resolveData);
+
+      $controller(constructor, locals);
+    }
 
   }
-
-
 
 
 })(window, window.angular);
