@@ -54,3 +54,57 @@ app.controller('MainCtrl', function ($scope, foModal) {
 </script>
 
 ```
+## API
+
+Api of fo-mdal is simple but powerful.
+
+### ``.open(options)``
+
+Method to create and  open a modal.
+
+**options**:
+
+  - `templateUrl`
+  - `controller`    
+  - `id`    
+  - `class`    
+  - `animation`    
+  - `overlay`    
+  - `showClose`    
+  - `closeByOverlay`    
+  - `scope`    
+  - `resolve`    
+
+
+##### templateUrl {String}
+
+```html
+<script type="text/ng-template" id="templateId">
+    <h1>eading</h1>
+    <div>Content</div>
+</script>
+```
+
+```javascript
+foModal.open({ templateUrl: 'templateId' });
+```
+
+##### controller {String} | {Array} | {Object}
+
+```javascript
+foModal.open({
+    template: 'template.html',
+    controller: 'mainController'
+});
+```
+
+or
+
+```javascript
+foModal.open({
+    template: 'template.html',
+    controller: ['$scope', 'otherService', function($scope, otherService) {
+      // todo
+    }]
+});
+```
