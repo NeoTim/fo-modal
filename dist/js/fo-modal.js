@@ -5,9 +5,9 @@
 
   .factory('foModal', foModal);
 
-  foModal.$inject = ['$rootScope', '$templateCache', '$document', '$compile', '$controller', '$q', '$injector'];
+  foModal.$inject = ['$rootScope', '$templateCache', '$document', '$compile', '$controller', '$q', '$injector', '$timeout'];
 
-  function foModal($rootScope, $templateCache, $document, $compile, $controller, $q, $injector) {
+  function foModal($rootScope, $templateCache, $document, $compile, $controller, $q, $injector, $timeout) {
 
     var $modal;
     var $layer = _createLayerElement();
@@ -104,7 +104,10 @@
 
       $layer.addClass('fo-open');
       $modal.addClass('fo-open').addClass('fo-fade-in');
-      new Tether(tetherOption);
+
+      $timeout(function() {
+        new Tether(tetherOption);
+      }, 1);
     }
 
     function _instantiateController(constructor, element, resolveData) {
