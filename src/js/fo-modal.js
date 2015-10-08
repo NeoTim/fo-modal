@@ -3,8 +3,13 @@
 
   angular.module('foModal', [])
 
-  .directive('foModalClose', function() {
+  .directive('foModalClose', foModalClose)
+    .factory('foModal', foModal);
 
+  /* foModalClose directive */
+  foModalClose.$inject = ['$document'];
+
+  function foModalClose($document) {
     return {
       restrict: 'A',
       scope: true,
@@ -12,25 +17,26 @@
         element.bind('click', function() {
           angular.element(document.querySelector('.fo-modal')).remove();
           angular.element(document.querySelector('.fo-layer')).remove();
+          angular.element($document).find('body').removeClass('fo-fixed');
         });
       }
     };
+  }
 
-  })
-
-  .factory('foModal', foModal);
-
+  /* foModal service */
   foModal.$inject = ['$rootScope', '$templateCache', '$document', '$compile', '$controller', '$q', '$injector', '$timeout'];
 
   function foModal($rootScope, $templateCache, $document, $compile, $controller, $q, $injector, $timeout) {
 
     var $modal;
     var $layer = _createLayerElement();
+    var $body = angular.element($document).find('body');
 
     var modal = {
 
       defaultConfig: {
-        showClose: true
+        showClose: true,
+        fixBody: true
       },
 
       open: function(options) {
@@ -48,7 +54,7 @@
 
         $q.all(promises).then(function(value) {
           _instantiateController(options.controller, $modal, value);
-          _showModal($modal, $layer);
+          _showModal($modal, $layer, options.fixBody);
           return this;
         });
       },
@@ -56,6 +62,7 @@
       close: function() {
         angular.element(document.querySelector('.fo-modal')).remove();
         angular.element(document.querySelector('.fo-layer')).remove();
+        angular.element($document).find('body').removeClass('fo-fixed');
       }
 
     };
@@ -80,7 +87,6 @@
     }
 
     function _appendToBody($modal, $layer) {
-      var $body = angular.element($document).find('body');
       $body.append($layer);
       $body.append($modal);
     }
@@ -95,7 +101,7 @@
       return promises;
     }
 
-    function _showModal($modal, $layer) {
+    function _showModal($modal, $layer, fixBody) {
       var tetherOption = {
         element: $modal[0],
         target: $layer[0],
@@ -105,6 +111,7 @@
 
       $layer.addClass('fo-open');
       $modal.addClass('fo-open').addClass('fo-fade-in');
+      if (fixBody) $body.addClass('fo-fixed');
 
       $timeout(function() {
         new Tether(tetherOption);
