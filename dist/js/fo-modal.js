@@ -3,6 +3,21 @@
 
   angular.module('foModal', [])
 
+  .directive('foModalClose', function() {
+
+    return {
+      restrict: 'A',
+      scope: true,
+      link: function(scope, element, attr) {
+        element.bind('click', function() {
+          angular.element(document.querySelector('.fo-modal')).remove();
+          angular.element(document.querySelector('.fo-layer')).remove();
+        });
+      }
+    };
+
+  })
+
   .factory('foModal', foModal);
 
   foModal.$inject = ['$rootScope', '$templateCache', '$document', '$compile', '$controller', '$q', '$injector', '$timeout'];
@@ -18,14 +33,6 @@
         showClose: true
       },
 
-      isCreated: function() {
-        return document.querySelector('.fo-layer') ? true : false;
-      },
-
-      isOpened: function() {
-        return $modal.hasClass('open');
-      },
-
       open: function(options) {
         options = angular.extend(modal.defaultConfig, options);
 
@@ -33,7 +40,7 @@
 
         $modal = _createModalElement(options.templateUrl, options.showClose);
 
-        _appendToBody($modal, $layer, modal.isCreated());
+        _appendToBody($modal, $layer);
 
         $compile($modal)($rootScope);
 
@@ -47,8 +54,8 @@
       },
 
       close: function() {
-        $modal.removeClass('fo-open');
-        $layer.removeClass('fo-open');
+        angular.element(document.querySelector('.fo-modal')).remove();
+        angular.element(document.querySelector('.fo-layer')).remove();
       }
 
     };
@@ -63,7 +70,7 @@
 
     function _createModalElement(templateUrl, showClose) {
       var templateString = $templateCache.get(templateUrl);
-      templateString = showClose ? templateString + '<div class="modal-close" ng-click="close()"></div>' : templateString;
+      templateString = showClose ? templateString + '<div fo-modal-close class="modal-close"></div>' : templateString;
       var $wrapper = angular.element('<div class="fo-modal fo-animated"></div>');
       return angular.element($wrapper).append(templateString);
     }
@@ -72,14 +79,8 @@
       return angular.element('<div class="fo-layer"></div>');
     }
 
-    function _appendToBody($modal, $layer, isModalCreated) {
+    function _appendToBody($modal, $layer) {
       var $body = angular.element($document).find('body');
-
-      if (isModalCreated) {
-        angular.element($layer).remove();
-        angular.element($modal).remove();
-      }
-
       $body.append($layer);
       $body.append($modal);
     }
