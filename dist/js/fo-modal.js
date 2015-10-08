@@ -14,6 +14,10 @@
 
     var modal = {
 
+      defaultConfig: {
+        showClose: true
+      },
+
       isCreated: function() {
         return document.querySelector('.fo-layer') ? true : false;
       },
@@ -23,7 +27,7 @@
       },
 
       open: function(options) {
-        options = _getOptions(options);
+        options = angular.extend(modal.defaultConfig, options);
 
         // if (options.controller && (angular.isString(options.controller) || angular.isArray(options.controller) || angular.isFunction(options.controller))) {}
 
@@ -56,13 +60,6 @@
     };
 
     /////////////////////////////////////////
-    function _getOptions(options) {
-      var defaultConfig = {
-        showClose: true
-      };
-      return angular.extend(defaultConfig, options);
-    }
-
 
     function _createModalElement(templateUrl, showClose) {
       var templateString = $templateCache.get(templateUrl);
