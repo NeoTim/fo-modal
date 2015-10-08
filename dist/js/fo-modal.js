@@ -23,10 +23,11 @@
       },
 
       open: function(options) {
+        options = _getOptions(options);
 
         // if (options.controller && (angular.isString(options.controller) || angular.isArray(options.controller) || angular.isFunction(options.controller))) {}
 
-        $modal = _createModalElement(options.templateUrl);
+        $modal = _createModalElement(options.templateUrl, options.showClose);
 
         _appendToBody($modal, $layer, modal.isCreated());
 
@@ -55,8 +56,17 @@
     };
 
     /////////////////////////////////////////
-    function _createModalElement(templateUrl) {
+    function _getOptions(options) {
+      var defaultConfig = {
+        showClose: true
+      };
+      return angular.extend(defaultConfig, options);
+    }
+
+
+    function _createModalElement(templateUrl, showClose) {
       var templateString = $templateCache.get(templateUrl);
+      templateString = showClose ? templateString + '<div class="modal-close" ng-click="close()"></div>' : templateString;
       var $wrapper = angular.element('<div class="fo-modal fo-animated"></div>');
       return angular.element($wrapper).append(templateString);
     }

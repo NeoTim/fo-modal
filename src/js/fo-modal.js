@@ -14,6 +14,10 @@
 
     var modal = {
 
+      defaultConfig: {
+        showClose: true
+      },
+
       isCreated: function() {
         return document.querySelector('.fo-layer') ? true : false;
       },
@@ -23,10 +27,11 @@
       },
 
       open: function(options) {
+        options = angular.extend(modal.defaultConfig, options);
 
         // if (options.controller && (angular.isString(options.controller) || angular.isArray(options.controller) || angular.isFunction(options.controller))) {}
 
-        $modal = _createModalElement(options.templateUrl);
+        $modal = _createModalElement(options.templateUrl, options.showClose);
 
         _appendToBody($modal, $layer, modal.isCreated());
 
@@ -55,8 +60,10 @@
     };
 
     /////////////////////////////////////////
-    function _createModalElement(templateUrl) {
+
+    function _createModalElement(templateUrl, showClose) {
       var templateString = $templateCache.get(templateUrl);
+      templateString = showClose ? templateString + '<div class="modal-close" ng-click="close()"></div>' : templateString;
       var $wrapper = angular.element('<div class="fo-modal fo-animated"></div>');
       return angular.element($wrapper).append(templateString);
     }
