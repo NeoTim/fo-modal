@@ -1,6 +1,6 @@
 {
   "name": "fo-modal",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "homepage": "https://github.com/forsigner/fo-modal",
   "authors": [
     "forsigner"
@@ -12,7 +12,6 @@
   "main": "dist/js/fo-modal.js",
   "keywords": [
     "angular",
-    "nearby",
     "popover",
     "tether"
   ],
