@@ -24,9 +24,9 @@
   }
 
   /* foModal service */
-  foModal.$inject = ['$rootScope', '$templateCache', '$document', '$compile', '$controller', '$q', '$injector', '$timeout'];
+  foModal.$inject = ['$rootScope', '$http', '$templateCache', '$document', '$compile', '$controller', '$q', '$injector', '$timeout'];
 
-  function foModal($rootScope, $templateCache, $document, $compile, $controller, $q, $injector, $timeout) {
+  function foModal($rootScope, $http, $templateCache, $document, $compile, $controller, $q, $injector, $timeout) {
 
     var $modal;
     var $layer = _createLayerElement();
@@ -44,19 +44,25 @@
 
         // if (options.controller && (angular.isString(options.controller) || angular.isArray(options.controller) || angular.isFunction(options.controller))) {}
 
-        $modal = _createModalElement(options.templateUrl, options.showClose);
+        _createModalElement(options.templateUrl, options.showClose).then(function(data) {
+          $modal = data;
 
-        _appendToBody($modal, $layer);
+          _appendToBody($modal, $layer);
 
-        $compile($modal)($rootScope);
+          $compile($modal)($rootScope);
 
-        var promises = _handleResolve(options.resolve);
+          var promises = _handleResolve(options.resolve);
 
-        $q.all(promises).then(function(value) {
-          _instantiateController(options.controller, $modal, value);
-          _showModal($modal, $layer, options.fixBody);
-          return this;
+          $q.all(promises).then(function(value) {
+            _instantiateController(options.controller, $modal, value);
+            _showModal($modal, $layer, options.fixBody);
+            return this;
+          });
+        }, function(err) {
+          // todo
+          console.log(err);
         });
+
       },
 
       close: function() {
@@ -75,11 +81,31 @@
 
     /////////////////////////////////////////
 
+    function _getTemplateString(templateUrl) {
+      var deferred = $q.defer();
+      if ($templateCache.get(templateUrl)) {
+        deferred.resolve($templateCache.get(templateUrl));
+      } else {
+        $http.get(templateUrl).then(function(res) {
+          deferred.resolve(res.data);
+        }, function() {
+          deferred.reject('empty template');
+        });
+      }
+      return deferred.promise;
+    }
+
     function _createModalElement(templateUrl, showClose) {
-      var templateString = $templateCache.get(templateUrl);
-      templateString = showClose ? templateString + '<div fo-modal-close class="modal-close"></div>' : templateString;
-      var $wrapper = angular.element('<div class="fo-modal fo-animated"></div>');
-      return angular.element($wrapper).append(templateString);
+      var deferred = $q.defer();
+      _getTemplateString(templateUrl).then(function(templateString) {
+        templateString = showClose ? templateString + '<div fo-modal-close class="modal-close"></div>' : templateString;
+        var $wrapper = angular.element('<div class="fo-modal fo-animated"></div>');
+
+        deferred.resolve(angular.element($wrapper).append(templateString));
+      }, function(err) {
+        deferred.reject(err);
+      });
+      return deferred.promise;
     }
 
     function _createLayerElement() {
