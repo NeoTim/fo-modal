@@ -22,8 +22,11 @@
   },
   "homepage": "https://github.com/forsigner/fo-modal#readme",
   "devDependencies": {
+    "babelify": "^6.3.0",
+    "browserify": "^11.2.0",
     "gulp-less": "^3.0.3",
     "gulp-minify-css": "^1.2.1",
-    "gulp-rename": "^1.2.2"
+    "gulp-rename": "^1.2.2",
+    "vinyl-source-stream": "^1.1.0"
   }
 }

@@ -1,28 +1,6 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-'use strict';
-
-module.exports = angular.module('foModalClose.directive', []).directive('foModalClose', foModalClose);
-
-foModalClose.$inject = ['$document'];
-
-function foModalClose($document) {
-  return {
-    restrict: 'A',
-    scope: true,
-    link: function link(scope, element, attr) {
-      element.bind('click', function () {
-        angular.element(document.querySelector('.fo-modal')).remove();
-        angular.element(document.querySelector('.fo-layer')).remove();
-        angular.element($document).find('body').removeClass('fo-fixed');
-      });
-    }
-  };
-}
-
-},{}],2:[function(require,module,exports){
-'use strict';
-
-module.exports = angular.module('foModal.services', []).factory('foModal', foModal);
+module.exports = angular
+  .module('foModal.services', [])
+  .factory('foModal', foModal);
 
 foModal.$inject = ['$rootScope', '$http', '$templateCache', '$document', '$compile', '$controller', '$q', '$injector', '$timeout'];
 
@@ -39,12 +17,12 @@ function foModal($rootScope, $http, $templateCache, $document, $compile, $contro
       fixBody: true
     },
 
-    open: function open(options) {
+    open: function(options) {
       options = angular.extend(modal.defaultConfig, options);
 
       // if (options.controller && (angular.isString(options.controller) || angular.isArray(options.controller) || angular.isFunction(options.controller))) {}
 
-      createModalElement(options.templateUrl, options.showClose).then(function (data) {
+      createModalElement(options.templateUrl, options.showClose).then(function(data) {
         $modal = data;
 
         appendToBody($modal, $layer);
@@ -53,24 +31,26 @@ function foModal($rootScope, $http, $templateCache, $document, $compile, $contro
 
         var promises = handleResolve(options.resolve);
 
-        $q.all(promises).then(function (value) {
+        $q.all(promises).then(function(value) {
           instantiateController(options.controller, $modal, value);
           showModal($modal, $layer, options.fixBody);
           return this;
         });
-      }, function (err) {
+      }, function(err) {
         // todo
         console.log(err);
       });
+
     },
 
-    close: function close() {
+    close: function() {
       angular.element(document.querySelector('.fo-modal')).remove();
       angular.element(document.querySelector('.fo-layer')).remove();
       angular.element($document).find('body').removeClass('fo-fixed');
     }
 
   };
+
 
   return {
     open: modal.open,
@@ -84,9 +64,9 @@ function foModal($rootScope, $http, $templateCache, $document, $compile, $contro
     if ($templateCache.get(templateUrl)) {
       deferred.resolve($templateCache.get(templateUrl));
     } else {
-      $http.get(templateUrl).then(function (res) {
+      $http.get(templateUrl).then(function(res) {
         deferred.resolve(res.data);
-      }, function () {
+      }, function() {
         deferred.reject('empty template');
       });
     }
@@ -95,12 +75,12 @@ function foModal($rootScope, $http, $templateCache, $document, $compile, $contro
 
   function createModalElement(templateUrl, showClose) {
     var deferred = $q.defer();
-    getTemplateString(templateUrl).then(function (templateString) {
+    getTemplateString(templateUrl).then(function(templateString) {
       templateString = showClose ? templateString + '<div fo-modal-close class="modal-close"></div>' : templateString;
       var $wrapper = angular.element('<div class="fo-modal fo-animated"></div>');
 
       deferred.resolve(angular.element($wrapper).append(templateString));
-    }, function (err) {
+    }, function(err) {
       deferred.reject(err);
     });
     return deferred.promise;
@@ -118,7 +98,7 @@ function foModal($rootScope, $http, $templateCache, $document, $compile, $contro
   function handleResolve(resolve) {
     var promises = {};
 
-    angular.forEach(resolve, function (value, key) {
+    angular.forEach(resolve, function(value, key) {
       promises[key] = angular.isString(value) ? value : $injector.invoke(value);
     });
 
@@ -137,7 +117,7 @@ function foModal($rootScope, $http, $templateCache, $document, $compile, $contro
     $modal.addClass('fo-open').addClass('fo-fade-in');
     if (fixBody) $body.addClass('fo-fixed');
 
-    $timeout(function () {
+    $timeout(function() {
       new Tether(tetherOption);
     }, 1);
   }
@@ -150,14 +130,5 @@ function foModal($rootScope, $http, $templateCache, $document, $compile, $contro
 
     $controller(constructor, locals);
   }
+
 }
-
-},{}],3:[function(require,module,exports){
-'use strict';
-
-var foModalCloseDirective = require('./fo-modal-close.directive');
-var foModalService = require('./fo-modal.service');
-
-module.exports = angular.module('foModal', [foModalCloseDirective.name, foModalService.name]);
-
-},{"./fo-modal-close.directive":1,"./fo-modal.service":2}]},{},[3]);
