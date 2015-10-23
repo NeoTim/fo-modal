@@ -32,9 +32,11 @@ function foModal($rootScope, $http, $templateCache, $document, $compile, $contro
         var promises = handleResolve(options.resolve);
 
         $q.all(promises).then(function(value) {
-          instantiateController(options.controller, $modal, value);
           showModal($modal, $layer, options.fixBody);
-          return this;
+          $timeout(function() {
+            instantiateController(options.controller, $modal, value);
+            return this;
+          }, 500);
         });
       }, function(err) {
         // todo
