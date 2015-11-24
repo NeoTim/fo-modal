@@ -66,8 +66,10 @@ Method to create and  open a modal.
 
   - `templateUrl`
   - `controller`    
-  - `id`    
-  - `class`    
+  - `bodyId`    
+  - `bodyClass`    
+  - `overlayId`    
+  - `overlayClass`    
   - `animation`    
   - `overlay`    
   - `showClose`    

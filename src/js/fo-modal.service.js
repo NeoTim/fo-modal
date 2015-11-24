@@ -32,7 +32,7 @@ function foModal($rootScope, $http, $templateCache, $document, $compile, $contro
         var promises = handleResolve(options.resolve);
 
         $q.all(promises).then(function(value) {
-          showModal($modal, $layer, options.fixBody);
+          showModal($modal, $layer, options);
           $timeout(function() {
             instantiateController(options.controller, $modal, value);
             return this;
@@ -107,7 +107,7 @@ function foModal($rootScope, $http, $templateCache, $document, $compile, $contro
     return promises;
   }
 
-  function showModal($modal, $layer, fixBody) {
+  function showModal($modal, $layer, options) {
     var tetherOption = {
       element: $modal[0],
       target: $layer[0],
@@ -117,7 +117,11 @@ function foModal($rootScope, $http, $templateCache, $document, $compile, $contro
 
     $layer.addClass('fo-open');
     $modal.addClass('fo-open').addClass('fo-fade-in');
-    if (fixBody) $body.addClass('fo-fixed');
+    if (options.fixBody) $body.addClass('fo-fixed');
+    if (options.bodyClass) $modal.addClass(options.bodyClass);
+    if (options.overlayClass) $layer.addClass(options.overlayClass);
+    if (options.bodyId) $modal.addClass(options.bodyId);
+    if (options.overlayId) $layer.addClass(options.overlayId);
 
     $timeout(function() {
       new Tether(tetherOption);
