@@ -1,7 +1,7 @@
 # fo-modal
 A nice modal
 
-[Demo](http://fo.modal.mipinr.com)
+[Demo](http://forsigner.com/fo-modal)
 
 ## Install
 
